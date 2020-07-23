@@ -1,12 +1,11 @@
 package com.wcs.portfolio.bundle.blog;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wcs.portfolio.bundle.ApplicationUser.ApplicationUser;
-import com.wcs.portfolio.bundle.hashtagBlog.HashtagBlog;
+import com.wcs.portfolio.bundle.hashtagBlog.Hashtag;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,12 +33,13 @@ public class Blog {
     @CreatedDate
     private Date updated_at;
 
-    @JsonManagedReference("portfolio-blog")
-    @ManyToMany()
+    @JsonIgnoreProperties("blogs")
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(name = "blog_hashtag",
-            joinColumns = @JoinColumn(name = "blog_id"),
-            inverseJoinColumns = @JoinColumn(name = "hashtagBlog_id"))
-    private List<HashtagBlog> hashtagBlogs= new ArrayList<>();
+            joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id", referencedColumnName = "id"),
+            uniqueConstraints={@UniqueConstraint(columnNames={"blog_id", "hashtag_id"})})
+    private List<Hashtag> hashtags;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -113,12 +113,12 @@ public class Blog {
         this.updated_at = updated_at;
     }
 
-    public List<HashtagBlog> getHashtagBlogs() {
-        return hashtagBlogs;
+    public List<Hashtag> getHashtags() {
+        return hashtags;
     }
 
-    public void setHashtagBlogs(List<HashtagBlog> hashtagBlogs) {
-        this.hashtagBlogs = hashtagBlogs;
+    public void setHashtags(List<Hashtag> hashtags) {
+        this.hashtags = hashtags;
     }
 
     public ApplicationUser getUser() {

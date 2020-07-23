@@ -10,28 +10,28 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class HashtagBlogService {
+public class HashtagService {
 
     @Autowired
-    HashtagBlogRepository repository;
+    HashtagRepository repository;
 
     @Autowired
     protected ModelMapper modelMapper;
 
-    public List<HashtagBlog> getAll() { return this.repository.findAll(); }
+    public List<Hashtag> getAll() { return this.repository.findAll(); }
 
-    public HashtagBlog getById( Long id ) { return this.repository.findById(id).get(); }
+    public Hashtag getById(Long id ) { return this.repository.findById(id).get(); }
 
-    public HashtagBlog add( HashtagBlog item) { return this.repository.save(item); }
+    public Hashtag add(Hashtag item) { return this.repository.save(item); }
 
-    public HashtagBlog update( Long id, HashtagBlog newObj) {
+    public Hashtag update(Long id, Hashtag newObj) {
 
         if (newObj.getId() != id) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Inconsistent parameter");
         }
 
-        Optional<HashtagBlog> obj = this.repository.findById(newObj.getId());
-        HashtagBlog updateObj = obj.get();
+        Optional<Hashtag> obj = this.repository.findById(newObj.getId());
+        Hashtag updateObj = obj.get();
 
         this.modelMapper.map(newObj, updateObj);
 

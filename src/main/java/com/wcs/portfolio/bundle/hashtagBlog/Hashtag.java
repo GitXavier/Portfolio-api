@@ -1,14 +1,13 @@
 package com.wcs.portfolio.bundle.hashtagBlog;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wcs.portfolio.bundle.blog.Blog;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class HashtagBlog {
+public class Hashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +15,15 @@ public class HashtagBlog {
 
     private String name;
 
-    @JsonBackReference("blog-hashtag")
-    @ManyToMany(mappedBy = "hashtagBlogs")
-    private List<Blog> Blogs = new ArrayList<>();
+    @JsonIgnoreProperties("hashtags")
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @JoinTable(name = "blog_hashtag",
+            joinColumns = @JoinColumn(name = "hashtag_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
+            uniqueConstraints={@UniqueConstraint(columnNames={"hashtag_id", "blog_id"})})
+    private List<Blog> blogs;
 
-    public HashtagBlog() { }
+    public Hashtag() { }
 
     public Long getId() {
         return id;
@@ -39,10 +42,10 @@ public class HashtagBlog {
     }
 
     public List<Blog> getBlogs() {
-        return Blogs;
+        return blogs;
     }
 
     public void setBlogs(List<Blog> blogs) {
-        Blogs = blogs;
+        this.blogs = blogs;
     }
 }

@@ -11,25 +11,25 @@ import java.util.List;
 public class HashtagController {
 
     @Autowired
-    HashtagBlogService service;
+    HashtagService service;
 
     @GetMapping
-    public List<HashtagBlog> getPropertyAll() {
+    public List<Hashtag> getPropertyAll() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public HashtagBlog getById(@PathVariable Long id) {
+    public Hashtag getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public HashtagBlog add(@RequestBody HashtagBlog obj) {
+    public Hashtag add(@RequestBody Hashtag obj) {
         return service.add(obj);
     }
 
     @PatchMapping("/{id}")
-    public HashtagBlog update(@PathVariable Long id, @RequestBody HashtagBlog obj) {
+    public Hashtag update(@PathVariable Long id, @RequestBody Hashtag obj) {
         return service.update(id, obj);
     }
 
